@@ -1,0 +1,2 @@
+I have Ubuntu installed on Windows with VirtualBox.
+I have created account in Github and installed Git on my machine, and I'm ready to use them.
