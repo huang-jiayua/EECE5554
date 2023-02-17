@@ -46,9 +46,9 @@ def driver():
             utmLatLon = utm.from_latlon(lat_converted, long_converted)
             print(f'UTM_East, UTM_north, Zone, Letter: {utmLatLon}')
             
-            msg.header.stamp.secs = IncorporatedSecond
-            msg.header.stamp.nsecs = nanosecond
-            msg.header.frame_id = 'GPS1_Frame'
+            msg.Header.stamp.secs = IncorporatedSecond
+            msg.Header.stamp.nsecs = nanosecond
+            msg.Header.frame_id = 'GPS1_Frame'
             msg.Latitude = lat_converted
             msg.Longitude = long_converted
             msg.Altitude = alt
