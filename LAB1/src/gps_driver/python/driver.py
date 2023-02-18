@@ -42,6 +42,7 @@ def driver():
                 long_converted = float(long1 + long2 / 60)
             else:
                 long_converted = 0 - float(long1 + long2 / 60)
+            HDOP = float(data[8])
             alt = float(data[9])
             utmLatLon = utm.from_latlon(lat_converted, long_converted)
             print(f'UTM_East, UTM_north, Zone, Letter: {utmLatLon}')
@@ -52,6 +53,7 @@ def driver():
             msg.Latitude = lat_converted
             msg.Longitude = long_converted
             msg.Altitude = alt
+            msg.HDOP = HDOP
             msg.UTM_easting = utmLatLon[0]
             msg.UTM_northing = utmLatLon[1]
             msg.Zone = utmLatLon[2]
