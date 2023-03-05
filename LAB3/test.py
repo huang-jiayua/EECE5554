@@ -1,51 +1,60 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import rospy
-import math
-from imu.srv import convert_to_quaternion
-import tf
+import utm
+import serial
+import sys
+import numpy
+from imu_driver.msg import *
+from imu_driver.msg import imu_msg
+from imu_driver.srv import convert_to_quaternion, convert_to_quaternionResponse
 
 
-class Quaternion:
-    def __init__(self, x=0, y=0, z=0, w=1):
-        self.x = x
-        self.y = y
-        self.z = z
-        self.w = w
+def driver():
+    pub = rospy.Publisher('imu', imu_msg, queue_size=10)
+    rospy.init_node('drive', anonymous=True)
+    msg = imu_msg()
 
+    args = rospy.myargv(argv=sys.argv)
 
-def handle_convert_to_quaternion(req):
-    roll = req.roll
-    pitch = req.pitch
-    yaw = req.yaw
+    nextline = serial.Serial(rospy.get_param('~port', args[1]),
+                             rospy.get_param('~baudrate', 115200))
 
-    quaternion = euler_to_quaternion(roll, pitch, yaw)
+    while not rospy.is_shutdown():
+        rawData = str(nextline.readline())
 
-    return convert_to_quaternionResponse(
-        x=quaternion.x, y=quaternion.y, z=quaternion.z, w=quaternion.w)
+        if "VNYMR" in rawData:
+            data = str(rawData).split(",")
+            print(data)
 
+            yaw = float(data[1])
+            pitch = float(data[2])
+            roll = float(data[3])
+            mag_x = float(data[4])
+            mag_y = float(data[5])
+            mag_z = float(data[6])
+            acc_x = float(data[7])
+            acc_y = float(data[8])
+            acc_z = float(data[9])
+            gyro_x = float(data[10])
+            gyro_y = float(data[11])
+            gyro_z = float(data[12])
 
-def euler_to_quaternion_server():
-    rospy.init_node('euler_to_quaternion_server')
-    s = rospy.Service('euler_to_quaternion', convert_to_quaternion, handle_euler_to_quaternion)
-    rospy.spin()
+            msg.yaw = yaw
+            msg.pitch = pitch
+            msg.roll = roll
+            msg.mag_x = mag_x
+            msg.mag_y = mag_y
+            msg.mag_z = mag_z
+            msg.acc_x = acc_x
+            msg.acc_y = acc_y
+            msg.acc_z = acc_z
+            msg.gyro_x = gyro_x
+            msg.gyro_y = gyro_y
+            msg.gyro_z = gyro_z
 
-
-def euler_to_quaternion(roll, pitch, yaw):
-    cy = math.cos(yaw * 0.5)
-    sy = math.sin(yaw * 0.5)
-    cp = math.cos(pitch * 0.5)
-    sp = math.sin(pitch * 0.5)
-    cr = math.cos(roll * 0.5)
-    sr = math.sin(roll * 0.5)
-
-    qw = cy * cp * cr + sy * sp * sr
-    qx = cy * cp * sr - sy * sp * cr
-    qy = sy * cp * sr + cy * sp * cr
-    qz = sy * cp * cr - cy * sp * sr
-
-    return qx, qy, qz, qw
+            pub.publish(msg)
 
 
 if __name__ == '__main__':
-    euler_to_quaternion_server()
+    driver()
