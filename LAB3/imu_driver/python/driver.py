@@ -21,7 +21,7 @@ def euler_to_quaternion(roll, pitch, yaw):
 
 
 def driver():
-    pub = rospy.Publisher('imu_driver', Vectornav, queue_size=10)
+    pub = rospy.Publisher('imu', Vectornav, queue_size=10)
     rospy.init_node('drive', anonymous=True)
     rate = rospy.Rate(40)
     msg = Vectornav()
