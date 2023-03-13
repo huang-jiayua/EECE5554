@@ -69,9 +69,9 @@ def driver():
             msg.IMU.angular_velocity.x = gyro_x
             msg.IMU.angular_velocity.y = gyro_y
             msg.IMU.angular_velocity.z = gyro_z
-            msg.MagField.magnetic_field.x = mag_x
-            msg.MagField.magnetic_field.y = mag_y
-            msg.MagField.magnetic_field.z = mag_z
+            msg.mag_field.magnetic_field.x = mag_x
+            msg.mag_field.magnetic_field.y = mag_y
+            msg.mag_field.magnetic_field.z = mag_z
             
             msg.VNYMR = rawData
             
