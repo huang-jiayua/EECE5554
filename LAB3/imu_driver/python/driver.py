@@ -60,15 +60,15 @@ def driver():
             gyro_y = float(data[11])
             gyro_z = float(data[12][0:9])
 
-            msg.IMU.orientation.x, msg.IMU.orientation.y, msg.IMU.orientation.z, msg.IMU.orientation.w = euler_to_quaternion(
+            msg.imu.orientation.x, msg.imu.orientation.y, msg.imu.orientation.z, msg.imu.orientation.w = euler_to_quaternion(
                 roll, pitch, yaw)
 
-            msg.IMU.linear_acceleration.x = acc_x
-            msg.IMU.linear_acceleration.y = acc_y
-            msg.IMU.linear_acceleration.z = acc_z
-            msg.IMU.angular_velocity.x = gyro_x
-            msg.IMU.angular_velocity.y = gyro_y
-            msg.IMU.angular_velocity.z = gyro_z
+            msg.imu.linear_acceleration.x = acc_x
+            msg.imu.linear_acceleration.y = acc_y
+            msg.imu.linear_acceleration.z = acc_z
+            msg.imu.angular_velocity.x = gyro_x
+            msg.imu.angular_velocity.y = gyro_y
+            msg.imu.angular_velocity.z = gyro_z
             msg.mag_field.magnetic_field.x = mag_x
             msg.mag_field.magnetic_field.y = mag_y
             msg.mag_field.magnetic_field.z = mag_z
